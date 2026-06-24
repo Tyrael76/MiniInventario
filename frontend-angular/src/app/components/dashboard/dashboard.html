@@ -1,0 +1,32 @@
+<div class="flex justify-between items-center mb-8">
+    <h1 class="text-2xl font-semibold mb-1">Resumen de Inventario</h1>
+</div>
+
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+    <!-- Card 1 -->
+    <div class="card p-5 relative overflow-hidden group">
+        <div class="flex justify-between items-start mb-2">
+            <span class="text-sm text-gray-400 font-medium">Total Productos</span>
+        </div>
+        <div class="text-2xl font-bold mb-2 text-blue-400">{{ totalProductos }}</div>
+        <p class="text-[11px] text-gray-500 mt-2">Productos registrados en el sistema.</p>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card p-5 relative group">
+        <div class="flex justify-between items-start mb-2">
+            <span class="text-sm text-gray-400 font-medium">Categorías</span>
+        </div>
+        <div class="text-2xl font-bold mb-1 text-teal-400">{{ totalCategorias }}</div>
+        <p class="text-[11px] text-gray-500 mt-2">Categorías activas.</p>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card p-5">
+        <div class="flex justify-between items-start mb-4">
+            <span class="text-sm text-gray-400 font-medium">Última actualización</span>
+        </div>
+        <div class="text-lg font-bold">Hoy</div>
+    </div>
+</div>

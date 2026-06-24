@@ -1,0 +1,101 @@
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-semibold mb-1">Catálogo de Productos</h1>
+    <button (click)="abrirModalNuevo()" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        Nuevo Producto
+    </button>
+</div>
+
+<div class="card overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-[#111318] text-gray-400 text-xs uppercase tracking-wider">
+                    <th class="px-5 py-3 font-medium">ID</th>
+                    <th class="px-5 py-3 font-medium">Producto</th>
+                    <th class="px-5 py-3 font-medium">Categoría</th>
+                    <th class="px-5 py-3 font-medium">Stock</th>
+                    <th class="px-5 py-3 font-medium">Precio</th>
+                    <th class="px-5 py-3 font-medium text-right">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm divide-y divide-gray-800/50">
+                <tr *ngFor="let p of productos" class="hover:bg-[#1a1d26] transition-colors">
+                    <td class="px-5 py-4">{{ p.idProducto }}</td>
+                    <td class="px-5 py-4">
+                        <div class="font-medium text-white">{{ p.nombreProducto }}</div>
+                        <div class="text-xs text-gray-500">{{ p.descripcionProducto }}</div>
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">
+                            {{ p.idCategoria?.nombreCategoria || 'Sin Categoría' }}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full" [ngClass]="p.existencia > 10 ? 'bg-green-500' : 'bg-red-500'"></div>
+                            <span>{{ p.existencia }}</span>
+                        </div>
+                    </td>
+                    <td class="px-5 py-4 text-blue-400 font-medium">${{ p.precioProducto }}</td>
+                    <td class="px-5 py-4 text-right">
+                        <button (click)="abrirModalEditar(p)" class="text-gray-400 hover:text-white mx-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </button>
+                        <button class="text-gray-400 hover:text-red-400 mx-1" (click)="eliminarProducto(p.idProducto)">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="productos.length === 0">
+                    <td colspan="6" class="px-5 py-8 text-center text-gray-500">
+                        No hay productos registrados.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Formulario -->
+<div *ngIf="mostrarModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity overflow-y-auto">
+    <div class="card p-6 w-full max-w-lg border border-gray-700 shadow-2xl relative my-8">
+        <h2 class="text-xl font-bold mb-4 text-white">{{ modoEdicion ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-1">Nombre</label>
+                <input type="text" [(ngModel)]="productoActual.nombreProducto" class="input-dark w-full px-4 py-2 rounded-lg text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Ej. Laptop Dell XPS">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-1">Descripción</label>
+                <textarea [(ngModel)]="productoActual.descripcionProducto" class="input-dark w-full px-4 py-2 rounded-lg text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500" rows="2" placeholder="Características principales..."></textarea>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-1">Precio ($)</label>
+                    <input type="number" [(ngModel)]="productoActual.precioProducto" class="input-dark w-full px-4 py-2 rounded-lg text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="0.00">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-1">Existencia (Stock)</label>
+                    <input type="number" [(ngModel)]="productoActual.existencia" class="input-dark w-full px-4 py-2 rounded-lg text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="0">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-1">Categoría</label>
+                <select [(ngModel)]="categoriaSeleccionadaId" class="input-dark w-full px-4 py-2 rounded-lg text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    <option [value]="0">-- Seleccione una categoría --</option>
+                    <option *ngFor="let cat of categorias" [value]="cat.idCategoria">{{ cat.nombreCategoria }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="flex justify-end gap-3 mt-6">
+            <button (click)="cerrarModal()" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-800 transition-colors">Cancelar</button>
+            <button (click)="guardarProducto()" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">Guardar</button>
+        </div>
+    </div>
+</div>

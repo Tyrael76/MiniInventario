@@ -1,0 +1,67 @@
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-semibold mb-1">Categorías</h1>
+    <button (click)="abrirModalNuevo()" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        Nueva Categoría
+    </button>
+</div>
+
+<div class="card overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-[#111318] text-gray-400 text-xs uppercase tracking-wider">
+                    <th class="px-5 py-3 font-medium">ID</th>
+                    <th class="px-5 py-3 font-medium">Nombre</th>
+                    <th class="px-5 py-3 font-medium">Descripción</th>
+                    <th class="px-5 py-3 font-medium text-right">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm divide-y divide-gray-800/50">
+                <tr *ngFor="let c of categorias" class="hover:bg-[#1a1d26] transition-colors">
+                    <td class="px-5 py-4">{{ c.idCategoria }}</td>
+                    <td class="px-5 py-4">
+                        <div class="font-medium text-white">{{ c.nombreCategoria }}</div>
+                    </td>
+                    <td class="px-5 py-4 text-gray-400">{{ c.descripcionCategoria }}</td>
+                    <td class="px-5 py-4 text-right">
+                        <button (click)="abrirModalEditar(c)" class="text-gray-400 hover:text-white mx-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </button>
+                        <button class="text-gray-400 hover:text-red-400 mx-1" (click)="eliminarCategoria(c.idCategoria)">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="categorias.length === 0">
+                    <td colspan="4" class="px-5 py-8 text-center text-gray-500">
+                        No hay categorías registradas.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Formulario -->
+<div *ngIf="mostrarModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity">
+    <div class="card p-6 w-full max-w-lg border border-gray-700 shadow-2xl relative">
+        <h2 class="text-xl font-bold mb-4 text-white">{{ modoEdicion ? 'Editar Categoría' : 'Nueva Categoría' }}</h2>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-1">Nombre</label>
+                <input type="text" [(ngModel)]="categoriaActual.nombreCategoria" class="input-dark w-full px-4 py-2 rounded-lg text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Ej. Electrónica">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-1">Descripción</label>
+                <textarea [(ngModel)]="categoriaActual.descripcionCategoria" class="input-dark w-full px-4 py-2 rounded-lg text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500" rows="3" placeholder="Descripción breve..."></textarea>
+            </div>
+        </div>
+
+        <div class="flex justify-end gap-3 mt-6">
+            <button (click)="cerrarModal()" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-800 transition-colors">Cancelar</button>
+            <button (click)="guardarCategoria()" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">Guardar</button>
+        </div>
+    </div>
+</div>
