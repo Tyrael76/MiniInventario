@@ -1,0 +1,52 @@
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-semibold mb-1">Archivos</h1>
+</div>
+
+<div class="card p-6 mb-8">
+    <h2 class="text-lg font-medium mb-4 text-gray-300">Subir nuevo archivo</h2>
+    <div class="flex items-center gap-4">
+        <input type="file" id="fileUpload" (change)="onFileSelected($event)" class="text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-700 file:text-white hover:file:bg-gray-600 transition-colors" />
+        <button [disabled]="!archivoSeleccionado || cargando" (click)="subirArchivo()" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+            </svg>
+            {{ cargando ? 'Subiendo...' : 'Subir' }}
+        </button>
+    </div>
+</div>
+
+<div class="card p-0 overflow-hidden">
+    <table class="w-full text-left text-sm">
+        <thead class="bg-[#2A3441] border-b border-gray-700">
+            <tr>
+                <th class="px-6 py-4 font-medium text-gray-300">ID</th>
+                <th class="px-6 py-4 font-medium text-gray-300">Nombre del Archivo</th>
+                <th class="px-6 py-4 font-medium text-gray-300">Tipo</th>
+                <th class="px-6 py-4 font-medium text-gray-300 text-right">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let archivo of archivos" class="border-b border-gray-700/50 hover:bg-[#2A3441]/50 transition-colors">
+                <td class="px-6 py-4 text-gray-400">#{{ archivo.idArchivo }}</td>
+                <td class="px-6 py-4 font-medium text-white">{{ archivo.nombreArchivo }}</td>
+                <td class="px-6 py-4">
+                    <span class="px-2 py-1 bg-gray-700 text-gray-300 rounded-full text-xs">{{ archivo.tipoArchivo }}</span>
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <button (click)="descargar(archivo.idArchivo)" class="text-blue-400 hover:text-blue-300 transition-colors mr-2" title="Descargar">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                          <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                          <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+            <tr *ngIf="archivos.length === 0">
+                <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+                    No hay archivos subidos aún.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
